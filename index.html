@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Weather World - Météo Mondiale - Check Weather Worldwide</title>
+    <meta name="description" content="Check the weather worldwide with Weather World. Search any city globally and get current temperature, humidity, wind speed, UV index, sunrise and sunset times. Free weather app in 22 languages.">
+    <meta name="keywords" content="weather, meteo, weather app, worldwide weather, global weather, free weather, weather forecast, temperature, humidity, wind, UV index, sunrise, sunset, Paris weather, Tokyo weather, New York weather">
+    <meta name="author" content="Weather World">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English, French, Spanish, German, Italian, Portuguese, Russian, Chinese, Japanese, Arabic, Hindi, Korean, Turkish, Polish, Dutch, Swedish, Vietnamese, Thai, Indonesian, Ukrainian, Czech, Greek">
+    <meta name="revisit-after" content="1 day">
+    <meta name="theme-color" content="#1a1a2e">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ephraimbleoue01-bot.github.io/weather-world/">
+    <meta property="og:title" content="Weather World - Check Weather Worldwide">
+    <meta property="og:description" content="Check the weather worldwide for free. Search any city globally and get current temperature, humidity, wind, UV index and more. Available in 22 languages!">
+    <meta property="og:image" content="https://ephraimbleoue01-bot.github.io/weather-world/weather-preview.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://ephraimbleoue01-bot.github.io/weather-world/">
+    <meta property="twitter:title" content="Weather World - Check Weather Worldwide">
+    <meta property="twitter:description" content="Check the weather worldwide for free. Search any city globally and get current temperature, humidity, wind, UV index and more. Available in 22 languages!">
+    <meta property="twitter:image" content="https://ephraimbleoue01-bot.github.io/weather-world/weather-preview.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ephraimbleoue01-bot.github.io/weather-world/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #e94560;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --success: #4ecca3;
+            --card-bg: rgba(22, 33, 62, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(233, 69, 96, 0.1) 0%, transparent 50%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+        }
+
+        .cloud {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.1;
+            animation: float 20s linear infinite;
+        }
+
+        .cloud:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .cloud:nth-child(2) { top: 30%; left: 80%; animation-delay: -5s; }
+        .cloud:nth-child(3) { top: 60%; left: 30%; animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translateX(-100vw); }
+            100% { transform: translateX(100vw); }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+        }
+
+        .language-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn:hover {
+            border-color: var(--accent);
+            background: rgba(233, 69, 96, 0.2);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: var(--secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            min-width: 220px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .language-dropdown.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .language-option {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .language-option:hover {
+            background: rgba(233, 69, 96, 0.2);
+        }
+
+        .language-option.active {
+            background: var(--accent);
+        }
+
+        .lang-flag {
+            font-size: 1.2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ffffff, #e94560);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Popular Cities */
+        .popular-cities {
+            margin-top: 1.5rem;
+        }
+
+        .popular-cities h3 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .city-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .city-tag {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .city-tag:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        /* Weather Display */
+        .weather-display {
+            display: none;
+            position: relative;
+        }
+
+        .weather-display.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Weather Animation Container */
+        .weather-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 25px;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Sunny Animation */
+        .sunny-bg {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 50%, #feca57 100%);
+            animation: sunnyGradient 10s ease infinite;
+        }
+
+        @keyframes sunnyGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .sun {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #ffd700 30%, transparent 70%);
+            border-radius: 50%;
+            animation: sunPulse 4s ease-in-out infinite;
+            box-shadow: 0 0 60px #ffd700, 0 0 100px #ff8c00;
+        }
+
+        @keyframes sunPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.9; }
+        }
+
+        /* Cloudy Animation */
+        .cloudy-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .cloud-anim {
+            position: absolute;
+            font-size: 4rem;
+            animation: cloudFloat 15s linear infinite;
+            opacity: 0.8;
+        }
+
+        .cloud-anim:nth-child(1) { top: 10%; animation-delay: 0s; }
+        .cloud-anim:nth-child(2) { top: 30%; animation-delay: -5s; font-size: 3rem; }
+        .cloud-anim:nth-child(3) { top: 50%; animation-delay: -10s; font-size: 5rem; }
+
+        @keyframes cloudFloat {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(400px); }
+        }
+
+        /* Rainy Animation */
+        .rainy-bg {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        }
+
+        .rain-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .rain-drop {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(transparent, rgba(174, 194, 224, 0.8));
+            animation: rainFall 1s linear infinite;
+        }
+
+        @keyframes rainFall {
+            0% { transform: translateY(-20px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(300px); opacity: 0; }
+        }
+
+        /* Snowy Animation */
+        .snowy-bg {
+            background: linear-gradient(135deg, #83a4d4 0%, #b6fbff 100%);
+        }
+
+        .snowflake {
+            position: absolute;
+            color: white;
+            font-size: 1.5rem;
+            animation: snowFall 5s linear infinite;
+            text-shadow: 0 0 5px rgba(255,255,255,0.8);
+        }
+
+        @keyframes snowFall {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(300px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Thunderstorm Animation */
+        .thunder-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        .lightning {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            transform: translateX(-50%);
+            animation: lightningFlash 3s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .lightning::before {
+            content: '⚡';
+            font-size: 8rem;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 0 30px #ffd700);
+        }
+
+        @keyframes lightningFlash {
+            0%, 89%, 91%, 93%, 100% { opacity: 0; }
+            90%, 92% { opacity: 1; }
+        }
+
+        .storm-cloud {
+            position: absolute;
+            font-size: 5rem;
+            animation: stormCloud 8s ease-in-out infinite;
+        }
+
+        @keyframes stormCloud {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(20px); }
+        }
+
+        /* Foggy Animation */
+        .foggy-bg {
+            background: linear-gradient(135deg, #757f9a 0%, #d7dde8 100%);
+        }
+
+        .fog {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: fogMove 10s linear infinite;
+        }
+
+        @keyframes fogMove {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+        }
+
+        .main-weather-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Real-time Clock */
+        .local-time {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .local-time .clock-icon {
+            font-size: 1rem;
+        }
+
+        .local-time .time {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .local-time .date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .city-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .city-name {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .country-code {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+        }
+
+        .weather-icon {
+            font-size: 6rem;
+            margin: 0.5rem 0;
+            animation: iconFloat 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .temperature {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ffffff, #4ecca3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .weather-description {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            text-transform: capitalize;
+        }
+
+        .feels-like {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .info-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid var(--accent);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .error-message h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .temperature {
+                font-size: 3rem;
+            }
+
+            .weather-icon {
+                font-size: 4rem;
+            }
+
+            .city-name {
+                font-size: 1.5rem;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .language-selector {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 1rem;
+            }
+
+            .language-dropdown {
+                position: static;
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="cloud">☁️</div>
+        <div class="cloud">☁️</div>
+        <div class="cloud">☁️</div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="language-selector">
+                <button class="language-btn" id="languageBtn">
+                    <span class="lang-flag">🌐</span>
+                    <span class="lang-name">Français</span>
+                    <span>▼</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown"></div>
+            </div>
+            <div class="logo">🌍</div>
+            <h1>Weather World</h1>
+            <p class="subtitle" id="subtitle">Vérifiez la météo dans le monde entier</p>
+        </header>
+
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" id="cityInput" placeholder="Entrez une ville...">
+                <button class="search-btn" id="searchBtn">
+                    <span>🔍</span>
+                    <span id="searchBtnText">Rechercher</span>
+                </button>
+            </div>
+            <div class="popular-cities">
+                <h3 id="popularCitiesTitle">Villes populaires</h3>
+                <div class="city-tags" id="cityTags">
+                    <button class="city-tag" data-city="Paris">Paris</button>
+                    <button class="city-tag" data-city="Tokyo">Tokyo</button>
+                    <button class="city-tag" data-city="New York">New York</button>
+                    <button class="city-tag" data-city="Londres">Londres</button>
+                    <button class="city-tag" data-city="Sydney">Sydney</button>
+                    <button class="city-tag" data-city="Dubaï">Dubaï</button>
+                    <button class="city-tag" data-city="Moscou">Moscou</button>
+                    <button class="city-tag" data-city="Rio de Janeiro">Rio</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p id="loadingText">Chargement des données météo...</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            <h3 id="errorTitle">⚠️ Ville non trouvée</h3>
+            <p id="errorText">Veuillez vérifier le nom de la ville et réessayer.</p>
+        </div>
+
+        <div class="weather-display" id="weatherDisplay">
+            <div class="weather-animation" id="weatherAnimation"></div>
+            <div class="main-weather-card">
+                <div class="local-time">
+                    <span class="clock-icon">🕐</span>
+                    <span class="time" id="localTime">--:--</span>
+                    <span class="date" id="localDate">--</span>
+                </div>
+                <div class="city-header">
+                    <span class="city-name" id="cityName">Ville</span>
+                    <span class="country-code" id="countryCode">FR</span>
+                </div>
+                <div class="weather-icon" id="weatherIcon">☀️</div>
+                <div class="temperature" id="temperature">--°C</div>
+                <div class="weather-description" id="weatherDescription">Ensoleillé</div>
+                <div class="feels-like" id="feelsLike">Ressenti --°C</div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">💧</div>
+                    <div class="info-label" id="humidityLabel">Humidité</div>
+                    <div class="info-value" id="humidity">--%</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">💨</div>
+                    <div class="info-label" id="windLabel">Vent</div>
+                    <div class="info-value" id="windSpeed">-- km/h</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">☀️</div>
+                    <div class="info-label" id="uvLabel">UV Index</div>
+                    <div class="info-value" id="uvIndex">--</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🌅</div>
+                    <div class="info-label" id="sunriseLabel">Lever du soleil</div>
+                    <div class="info-value" id="sunrise">--:--</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🌇</div>
+                    <div class="info-label" id="sunsetLabel">Coucher du soleil</div>
+                    <div class="info-value" id="sunset">--:--</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p id="footerText">Données météo fournies par <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Language translations
+        const translations = {
+            fr: {
+                subtitle: "Vérifiez la météo dans le monde entier",
+                searchPlaceholder: "Entrez une ville...",
+                searchBtn: "Rechercher",
+                popularCities: "Villes populaires",
+                loading: "Chargement des données météo...",
+                errorTitle: "⚠️ Ville non trouvée",
+                errorText: "Veuillez vérifier le nom de la ville et réessayer.",
+                connectionError: "Erreur de connexion. Veuillez vérifier votre connexion internet.",
+                enterCity: "Veuillez entrer le nom d'une ville.",
+                feelsLike: "Ressenti",
+                humidity: "Humidité",
+                wind: "Vent",
+                uvIndex: "UV Index",
+                sunrise: "Lever du soleil",
+                sunset: "Coucher du soleil",
+                footer: "Données météo fournies par",
+                language: "Français",
+                cities: {
+                    "Paris": "Paris",
+                    "Tokyo": "Tokyo",
+                    "New York": "New York",
+                    "Londres": "Londres",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubaï",
+                    "Moscou": "Moscou",
+                    "Rio de Janeiro": "Rio"
+                }
+            },
+            en: {
+                subtitle: "Check the weather worldwide",
+                searchPlaceholder: "Enter a city...",
+                searchBtn: "Search",
+                popularCities: "Popular Cities",
+                loading: "Loading weather data...",
+                errorTitle: "⚠️ City not found",
+                errorText: "Please check the city name and try again.",
+                connectionError: "Connection error. Please check your internet connection.",
+                enterCity: "Please enter a city name.",
+                feelsLike: "Feels like",
+                humidity: "Humidity",
+                wind: "Wind",
+                uvIndex: "UV Index",
+                sunrise: "Sunrise",
+                sunset: "Sunset",
+                footer: "Weather data provided by",
+                language: "English",
+                cities: {
+                    "Paris": "Paris",
+                    "Tokyo": "Tokyo",
+                    "New York": "New York",
+                    "Londres": "London",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubai",
+                    "Moscou": "Moscow",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            es: {
+                subtitle: "Consulta el clima en todo el mundo",
+                searchPlaceholder: "Ingresa una ciudad...",
+                searchBtn: "Buscar",
+                popularCities: "Ciudades Populares",
+                loading: "Cargando datos del clima...",
+                errorTitle: "⚠️ Ciudad no encontrada",
+                errorText: "Por favor verifica el nombre de la ciudad e intenta de nuevo.",
+                connectionError: "Error de conexión. Por favor verifica tu conexión a internet.",
+                enterCity: "Por favor ingresa el nombre de una ciudad.",
+                feelsLike: "Sensación térmica",
+                humidity: "Humedad",
+                wind: "Viento",
+                uvIndex: "Índice UV",
+                sunrise: "Amanecer",
+                sunset: "Atardecer",
+                footer: "Datos del clima proporcionados por",
+                language: "Español",
+                cities: {
+                    "Paris": "París",
+                    "Tokyo": "Tokio",
+                    "New York": "Nueva York",
+                    "Londres": "Londres",
+                    "Sydney": "Sídney",
+                    "Dubaï": "Dubái",
+                    "Moscou": "Moscú",
+                    "Rio de Janeiro": "Río de Janeiro"
+                }
+            },
+            de: {
+                subtitle: "Wetter weltweit prüfen",
+                searchPlaceholder: "Stadt eingeben...",
+                searchBtn: "Suchen",
+                popularCities: "Beliebte Städte",
+                loading: "Wetterdaten werden geladen...",
+                errorTitle: "⚠️ Stadt nicht gefunden",
+                errorText: "Bitte überprüfen Sie den Städtenamen und versuchen Sie es erneut.",
+                connectionError: "Verbindungsfehler. Bitte überprüfen Sie Ihre Internetverbindung.",
+                feelsLike: "Gefühlt wie",
+                humidity: "Luftfeuchtigkeit",
+                wind: "Wind",
+                uvIndex: "UV-Index",
+                sunrise: "Sonnenaufgang",
+                sunset: "Sonnenuntergang",
+                footer: "Wetterdaten bereitgestellt von",
+                language: "Deutsch",
+                cities: {
+                    "Paris": "Paris",
+                    "Tokyo": "Tokio",
+                    "New York": "New York",
+                    "Londres": "London",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubai",
+                    "Moscou": "Moskau",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            it: {
+                subtitle: "Controlla il meteo in tutto il mondo",
+                searchPlaceholder: "Inserisci una città...",
+                searchBtn: "Cerca",
+                popularCities: "Città Popolari",
+                loading: "Caricamento dati meteo...",
+                errorTitle: "⚠️ Città non trovata",
+                errorText: "Per favore verifica il nome della città e riprova.",
+                connectionError: "Errore di connessione. Per favore verifica la tua connessione internet.",
+                feelsLike: "Percepita",
+                humidity: "Umidità",
+                wind: "Vento",
+                uvIndex: "Indice UV",
+                sunrise: "Alba",
+                sunset: "Tramonto",
+                footer: "Dati meteo forniti da",
+                language: "Italiano",
+                cities: {
+                    "Paris": "Parigi",
+                    "Tokyo": "Tokyo",
+                    "New York": "New York",
+                    "Londres": "Londra",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubai",
+                    "Moscou": "Mosca",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            pt: {
+                subtitle: "Verifique o clima em todo o mundo",
+                searchPlaceholder: "Digite uma cidade...",
+                searchBtn: "Pesquisar",
+                popularCities: "Cidades Populares",
+                loading: "Carregando dados do clima...",
+                errorTitle: "⚠️ Cidade não encontrada",
+                errorText: "Por favor, verifique o nome da cidade e tente novamente.",
+                connectionError: "Erro de conexão. Por favor, verifique sua conexão com a internet.",
+                feelsLike: "Sensação",
+                humidity: "Umidade",
+                wind: "Vento",
+                uvIndex: "Índice UV",
+                sunrise: "Nascer do sol",
+                sunset: "Pôr do sol",
+                footer: "Dados do clima fornecidos por",
+                language: "Português",
+                cities: {
+                    "Paris": "Paris",
+                    "Tokyo": "Tóquio",
+                    "New York": "Nova York",
+                    "Londres": "Londres",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubai",
+                    "Moscou": "Moscou",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            ru: {
+                subtitle: "Проверьте погоду по всему миру",
+                searchPlaceholder: "Введите город...",
+                searchBtn: "Поиск",
+                popularCities: "Популярные города",
+                loading: "Загрузка данных о погоде...",
+                errorTitle: "⚠️ Город не найден",
+                errorText: "Пожалуйста, проверьте название города и попробуйте снова.",
+                connectionError: "Ошибка подключения. Пожалуйста, проверьте подключение к интернету.",
+                feelsLike: "Ощущается как",
+                humidity: "Влажность",
+                wind: "Ветер",
+                uvIndex: "УФ-индекс",
+                sunrise: "Восход",
+                sunset: "Закат",
+                footer: "Данные о погоде предоставлены",
+                language: "Русский",
+                cities: {
+                    "Paris": "Париж",
+                    "Tokyo": "Токио",
+                    "New York": "Нью-Йорк",
+                    "Londres": "Лондон",
+                    "Sydney": "Сидней",
+                    "Dubaï": "Дубай",
+                    "Moscou": "Москва",
+                    "Rio de Janeiro": "Рио-де-Жанейро"
+                }
+            },
+            zh: {
+                subtitle: "查看全球天气",
+                searchPlaceholder: "输入城市...",
+                searchBtn: "搜索",
+                popularCities: "热门城市",
+                loading: "正在加载天气数据...",
+                errorTitle: "⚠️ 未找到城市",
+                errorText: "请检查城市名称并重试。",
+                connectionError: "连接错误。请检查您的网络连接。",
+                feelsLike: "体感温度",
+                humidity: "湿度",
+                wind: "风速",
+                uvIndex: "紫外线指数",
+                sunrise: "日出",
+                sunset: "日落",
+                footer: "天气数据由",
+                language: "中文",
+                cities: {
+                    "Paris": "巴黎",
+                    "Tokyo": "东京",
+                    "New York": "纽约",
+                    "Londres": "伦敦",
+                    "Sydney": "悉尼",
+                    "Dubaï": "迪拜",
+                    "Moscou": "莫斯科",
+                    "Rio de Janeiro": "里约热内卢"
+                }
+            },
+            ja: {
+                subtitle: "世界中の天気を確認",
+                searchPlaceholder: "都市名を入力...",
+                searchBtn: "検索",
+                popularCities: "人気の都市",
+                loading: "天気データを読み込み中...",
+                errorTitle: "⚠️ 都市が見つかりません",
+                errorText: "都市名を確認して再試行してください。",
+                connectionError: "接続エラー。インターネット接続を確認してください。",
+                feelsLike: "体感温度",
+                humidity: "湿度",
+                wind: "風速",
+                uvIndex: "UVインデックス",
+                sunrise: "日の出",
+                sunset: "日の入り",
+                footer: "天気データ提供:",
+                language: "日本語",
+                cities: {
+                    "Paris": "パリ",
+                    "Tokyo": "東京",
+                    "New York": "ニューヨーク",
+                    "Londres": "ロンドン",
+                    "Sydney": "シドニー",
+                    "Dubaï": "ドバイ",
+                    "Moscou": "モスクワ",
+                    "Rio de Janeiro": "リオデジャネイロ"
+                }
+            },
+            ar: {
+                subtitle: "تحقق من الطقس في جميع أنحاء العالم",
+                searchPlaceholder: "أدخل مدينة...",
+                searchBtn: "بحث",
+                popularCities: "مدن شائعة",
+                loading: "جاري تحميل بيانات الطقس...",
+                errorTitle: "⚠️ المدينة غير موجودة",
+                errorText: "يرجى التحقق من اسم المدينة والمحاولة مرة أخرى.",
+                connectionError: "خطأ في الاتصال. يرجى التحقق من اتصالك بالإنترنت.",
+                feelsLike: "يشعر",
+                humidity: "الرطوبة",
+                wind: "الرياح",
+                uvIndex: "مؤشر الأشعة فوق البنفسجية",
+                sunrise: "شروق الشمس",
+                sunset: "غروب الشمس",
+                footer: "بيانات الطقس مقدمة من",
+                language: "العربية",
+                cities: {
+                    "Paris": "باريس",
+                    "Tokyo": "طوكيو",
+                    "New York": "نيويورك",
+                    "Londres": "لندن",
+                    "Sydney": "سيدني",
+                    "Dubaï": "دبي",
+                    "Moscou": "موسكو",
+                    "Rio de Janeiro": "ريو دي جانيرو"
+                }
+            },
+            hi: {
+                subtitle: "दुनिया भर में मौस्थ की जांच करें",
+                searchPlaceholder: "शहर का नाम दर्ज करें...",
+                searchBtn: "खोजें",
+                popularCities: "लोकप्रिय शहर",
+                loading: "मौसम डेटा लोड हो रहा है...",
+                errorTitle: "⚠️ शहर नहीं मिला",
+                errorText: "कृपया शहर का नाम जांचें और पुनः प्रयास करें।",
+                connectionError: "कनेक्शन त्रुटि। कृपया अपना इंटरनेट कनेक्शन जांचें।",
+                feelsLike: "महसूस होता है",
+                humidity: "नमी",
+                wind: "हवा",
+                uvIndex: "यूवी इंडेक्स",
+                sunrise: "सूर्योदय",
+                sunset: "सूर्यास्त",
+                footer: "मौसम डेटा प्रदान करता है",
+                language: "हिन्दी",
+                cities: {
+                    "Paris": "पेरिस",
+                    "Tokyo": "टोक्यो",
+                    "New York": "न्यू यॉर्क",
+                    "Londres": "लंदन",
+                    "Sydney": "सिडनी",
+                    "Dubaï": "दुबई",
+                    "Moscou": "मॉस्को",
+                    "Rio de Janeiro": "रियो डी जनेरियो"
+                }
+            },
+            ko: {
+                subtitle: "전 세계 날씨 확인",
+                searchPlaceholder: "도시 입력...",
+                searchBtn: "검색",
+                popularCities: "인기 도시",
+                loading: "날씨 데이터 로딩 중...",
+                errorTitle: "⚠️ 도시를 찾을 수 없습니다",
+                errorText: "도시 이름을 확인하고 다시 시도해 주세요.",
+                connectionError: "연결 오류. 인터넷 연결을 확인해 주세요.",
+                feelsLike: "체감 온도",
+                humidity: "습도",
+                wind: "바람",
+                uvIndex: "자외선 지수",
+                sunrise: "일출",
+                sunset: "일몰",
+                footer: "날씨 데이터 제공:",
+                language: "한국어",
+                cities: {
+                    "Paris": "파리",
+                    "Tokyo": "도쿄",
+                    "New York": "뉴욕",
+                    "Londres": "런던",
+                    "Sydney": "시드니",
+                    "Dubaï": "두바이",
+                    "Moscou": "모스크바",
+                    "Rio de Janeiro": "리우데자네이루"
+                }
+            },
+            tr: {
+                subtitle: "Dünya genelinde hava durumunu kontrol edin",
+                searchPlaceholder: "Bir şehir girin...",
+                searchBtn: "Ara",
+                popularCities: "Popüler Şehirler",
+                loading: "Hava durumu verileri yükleniyor...",
+                errorTitle: "⚠️ Şehir bulunamadı",
+                errorText: "Lütfen şehir adını kontrol edin ve tekrar deneyin.",
+                connectionError: "Bağlantı hatası. Lütfen internet bağlantınızı kontrol edin.",
+                feelsLike: "Hissedilen",
+                humidity: "Nem",
+                wind: "Rüzgar",
+                uvIndex: "UV Endeksi",
+                sunrise: "Güneş doğuşu",
+                sunset: "Güneş batışı",
+                footer: "Hava durumu verileri sağlayan",
+                language: "Türkçe",
+                cities: {
+                    "Paris": "Paris",
+                    "Tokyo": "Tokyo",
+                    "New York": "New York",
+                    "Londres": "Londra",
+                    "Sydney": "Sidney",
+                    "Dubaï": "Dubai",
+                    "Moscou": "Moskova",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            pl: {
+                subtitle: "Sprawdź pogodę na całym świecie",
+                searchPlaceholder: "Wpisz miasto...",
+                searchBtn: "Szukaj",
+                popularCities: "Popularne miasta",
+                loading: "Ładowanie danych pogodowych...",
+                errorTitle: "⚠️ Miasto nie znalezione",
+                errorText: "Proszę sprawdzić nazwę miasta i spróbować ponownie.",
+                connectionError: "Błąd połączenia. Proszę sprawdzić połączenie internetowe.",
+                feelsLike: "Odczuwalna",
+                humidity: "Wilgotność",
+                wind: "Wiatr",
+                uvIndex: "Indeks UV",
+                sunrise: "Wschód słońca",
+                sunset: "Zachód słońca",
+                footer: "Dane pogodowe dostarcza",
+                language: "Polski",
+                cities: {
+                    "Paris": "Paryż",
+                    "Tokyo": "Tokio",
+                    "New York": "Nowy Jork",
+                    "Londres": "Londyn",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubaj",
+                    "Moscou": "Moskwa",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            nl: {
+                subtitle: "Controleer het weer wereldwijd",
+                searchPlaceholder: "Voer een stad in...",
+                searchBtn: "Zoeken",
+                popularCities: "Populaire steden",
+                loading: "Weergegevens laden...",
+                errorTitle: "⚠️ Stad niet gevonden",
+                errorText: "Controleer de stadnaam en probeer het opnieuw.",
+                connectionError: "Verbindingsfout. Controleer uw internetverbinding.",
+                feelsLike: "Gevoelstemperatuur",
+                humidity: "Luchtvochtigheid",
+                wind: "Wind",
+                uvIndex: "UV-index",
+                sunrise: "Zonsopgang",
+                sunset: "Zonsondergang",
+                footer: "Weergegevens aangeleverd door",
+                language: "Nederlands",
+                cities: {
+                    "Paris": "Parijs",
+                    "Tokyo": "Tokio",
+                    "New York": "New York",
+                    "Londres": "Londen",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubai",
+                    "Moscou": "Moskou",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            sv: {
+                subtitle: "Kontrollera vädret världen över",
+                searchPlaceholder: "Ange en stad...",
+                searchBtn: "Sök",
+                popularCities: "Populära städer",
+                loading: "Laddar väderdata...",
+                errorTitle: "⚠️ Stad hittades inte",
+                errorText: "Kontrollera stadens namn och försök igen.",
+                connectionError: "Anslutningsfel. Kontrollera din internetanslutning.",
+                feelsLike: "Känns som",
+                humidity: "Luftfuktighet",
+                wind: "Vind",
+                uvIndex: "UV-index",
+                sunrise: "Soluppgång",
+                sunset: "Solnedgång",
+                footer: "Väderdata tillhandahålls av",
+                language: "Svenska",
+                cities: {
+                    "Paris": "Paris",
+                    "Tokyo": "Tokyo",
+                    "New York": "New York",
+                    "Londres": "London",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubai",
+                    "Moscou": "Moskva",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            vi: {
+                subtitle: "Kiểm tra thời tiết trên toàn thế giới",
+                searchPlaceholder: "Nhập thành phố...",
+                searchBtn: "Tìm kiếm",
+                popularCities: "Thành phố phổ biến",
+                loading: "Đang tải dữ liệu thời tiết...",
+                errorTitle: "⚠️ Không tìm thấy thành phố",
+                errorText: "Vui lòng kiểm tra tên thành phố và thử lại.",
+                connectionError: "Lỗi kết nối. Vui lòng kiểm tra kết nối internet của bạn.",
+                feelsLike: "Cảm nhận",
+                humidity: "Độ ẩm",
+                wind: "Gió",
+                uvIndex: "Chỉ số UV",
+                sunrise: "Mặt trời mọc",
+                sunset: "Mặt trời lặn",
+                footer: "Dữ liệu thời tiết được cung cấp bởi",
+                language: "Tiếng Việt",
+                cities: {
+                    "Paris": "Paris",
+                    "Tokyo": "Tokyo",
+                    "New York": "New York",
+                    "Londres": "London",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubai",
+                    "Moscou": "Moscow",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            th: {
+                subtitle: "ตรวจสอบสภาพอากาศทั่วโลก",
+                searchPlaceholder: "ใส่ชื่อเมือง...",
+                searchBtn: "ค้นหา",
+                popularCities: "เมืองยอดนิยม",
+                loading: "กำลังโหลดข้อมูลอากาศ...",
+                errorTitle: "⚠️ ไม่พบเมือง",
+                errorText: "กรุณาตรวจสอบชื่อเมืองและลองอีกครั้ง",
+                connectionError: "ข้อผิดพลาดในการเชื่อมต่อ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต",
+                feelsLike: "รู้สึกเหมือน",
+                humidity: "ความชื้น",
+                wind: "ลม",
+                uvIndex: "ดัชนี UV",
+                sunrise: "พระอาทิตย์ขึ้น",
+                sunset: "พระอาทิตย์ตก",
+                footer: "ข้อมูลอากาศจัดหาโดย",
+                language: "ไทย",
+                cities: {
+                    "Paris": "ปารีส",
+                    "Tokyo": "โตเกียว",
+                    "New York": "นิวยอร์ก",
+                    "Londres": "ลอนดอน",
+                    "Sydney": "ซิดนีย์",
+                    "Dubaï": "ดูไบ",
+                    "Moscou": "มอสโคว",
+                    "Rio de Janeiro": "ริโอเดจาเนโร"
+                }
+            },
+            id: {
+                subtitle: "Periksa cuaca di seluruh dunia",
+                searchPlaceholder: "Masukkan kota...",
+                searchBtn: "Cari",
+                popularCities: "Kota Populer",
+                loading: "Memuat data cuaca...",
+                errorTitle: "⚠️ Kota tidak ditemukan",
+                errorText: "Silakan periksa nama kota dan coba lagi.",
+                connectionError: "Kesalahan koneksi. Silakan periksa koneksi internet Anda.",
+                feelsLike: "Terasa seperti",
+                humidity: "Kelembaban",
+                wind: "Angin",
+                uvIndex: "Indeks UV",
+                sunrise: "Matahari terbit",
+                sunset: "Matahari terbenam",
+                footer: "Data cuaca disediakan oleh",
+                language: "Bahasa Indonesia",
+                cities: {
+                    "Paris": "Paris",
+                    "Tokyo": "Tokyo",
+                    "New York": "New York",
+                    "Londres": "London",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubai",
+                    "Moscou": "Moskwa",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            uk: {
+                subtitle: "Перевірте погоду по всьому світу",
+                searchPlaceholder: "Введіть місто...",
+                searchBtn: "Пошук",
+                popularCities: "Популярні міста",
+                loading: "Завантаження даних про погоду...",
+                errorTitle: "⚠️ Місто не знайдено",
+                errorText: "Будь ласка, перевірте назву міста та спробуйте ще раз.",
+                connectionError: "Помилка з'єднання. Будь ласка, перевірте підключення до інтернету.",
+                feelsLike: "Відчувається як",
+                humidity: "Вологість",
+                wind: "Вітер",
+                uvIndex: "УФ-індекс",
+                sunrise: "Схід сонця",
+                sunset: "Захід сонця",
+                footer: "Дані про погоду надає",
+                language: "Українська",
+                cities: {
+                    "Paris": "Париж",
+                    "Tokyo": "Токіо",
+                    "New York": "Нью-Йорк",
+                    "Londres": "Лондон",
+                    "Sydney": "Сідней",
+                    "Dubaï": "Дубай",
+                    "Moscou": "Москва",
+                    "Rio de Janeiro": "Ріо-де-Жанейро"
+                }
+            },
+            cs: {
+                subtitle: "Kontrolujte počasí po celém světě",
+                searchPlaceholder: "Zadejte město...",
+                searchBtn: "Hledat",
+                popularCities: "Oblíbená města",
+                loading: "Načítám data o počasí...",
+                errorTitle: "⚠️ Město nenalezeno",
+                errorText: "Zkontrolujte prosím název města a zkuste to znovu.",
+                connectionError: "Chyba připojení. Zkontrolujte prosím připojení k internetu.",
+                feelsLike: "Pocitová teplota",
+                humidity: "Vlhkost",
+                wind: "Vítr",
+                uvIndex: "UV index",
+                sunrise: "Východ slunce",
+                sunset: "Západ slunce",
+                footer: "Data o počasí poskytuje",
+                language: "Čeština",
+                cities: {
+                    "Paris": "Paříž",
+                    "Tokyo": "Tokio",
+                    "New York": "New York",
+                    "Londres": "Londýn",
+                    "Sydney": "Sydney",
+                    "Dubaï": "Dubaj",
+                    "Moscou": "Moskva",
+                    "Rio de Janeiro": "Rio de Janeiro"
+                }
+            },
+            el: {
+                subtitle: "Ελέγξτε τον καιρό σε όλο τον κόσμο",
+                searchPlaceholder: "Εισάγετε μια πόλη...",
+                searchBtn: "Αναζήτηση",
+                popularCities: "Δημοφιλείς πόλεις",
+                loading: "Φόρτωση δεδομένων καιρού...",
+                errorTitle: "⚠️ Η πόλη δεν βρέθηκε",
+                errorText: "Ελέγξτε το όνομα της πόλης και δοκιμάστε ξανά.",
+                connectionError: "Σφάλμα σύνδεσης. Ελέγξτε τη σύνδεσή σας στο διαδίκτυο.",
+                feelsLike: "Αισθητή",
+                humidity: "Υγρασία",
+                wind: "Άνεμος",
+                uvIndex: "Δείκτης UV",
+                sunrise: "Ανατολή",
+                sunset: "Δύση",
+                footer: "Δεδομένα καιρού παρέχονται από",
+                language: "Ελληνικά",
+                cities: {
+                    "Paris": "Παρίσι",
+                    "Tokyo": "Τόκιο",
+                    "New York": "Νέα Υόρκη",
+                    "Londres": "Λονδίνο",
+                    "Sydney": "Σίδνεϊ",
+                    "Dubaï": "Ντουμπάι",
+                    "Moscou": "Μόσχα",
+                    "Rio de Janeiro": "Ρίο ντε Ζανέιρο"
+                }
+            }
+        };
+
+        // List of languages for the dropdown
+        const languages = [
+            { code: 'fr', name: 'Français', flag: '🇫🇷' },
+            { code: 'en', name: 'English', flag: '🇬🇧' },
+            { code: 'es', name: 'Español', flag: '🇪🇸' },
+            { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+            { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+            { code: 'pt', name: 'Português', flag: '🇵🇹' },
+            { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+            { code: 'zh', name: '中文', flag: '🇨🇳' },
+            { code: 'ja', name: '日本語', flag: '🇯🇵' },
+            { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+            { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+            { code: 'ko', name: '한국어', flag: '🇰🇷' },
+            { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+            { code: 'pl', name: 'Polski', flag: '🇵🇱' },
+            { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+            { code: 'sv', name: 'Svenska', flag: '🇸🇪' },
+            { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
+            { code: 'th', name: 'ไทย', flag: '🇹🇭' },
+            { code: 'id', name: 'Bahasa Indonesia', flag: '🇮🇩' },
+            { code: 'uk', name: 'Українська', flag: '🇺🇦' },
+            { code: 'cs', name: 'Čeština', flag: '🇨🇿' },
+            { code: 'el', name: 'Ελληνικά', flag: '🇬🇷' }
+        ];
+
+        // Current language
+        let currentLang = 'fr';
+        let currentTimezone = 'Europe/Paris';
+        let timeUpdateInterval = null;
+
+        // Weather code translations
+        const weatherCodeTranslations = {
+            fr: {
+                0: 'Ciel dégagé', 1: 'Plutôt dégagé', 2: 'Partiellement nuageux', 3: 'Nuageux',
+                45: 'Brouillard', 48: 'Brouillard givrant', 51: 'Bruine légère', 53: 'Bruine modérée',
+                55: 'Bruine dense', 61: 'Pluie légère', 63: 'Pluie modérée', 65: 'Forte pluie',
+                71: 'Neige légère', 73: 'Neige modérée', 75: 'Forte neige', 77: 'Grains de neige',
+                80: 'Averses légères', 81: 'Averses modérées', 82: 'Averses violentes',
+                85: 'Averses de neige', 86: 'Fortes averses de neige', 95: 'Orage',
+                96: 'Orage avec grêle', 99: 'Orage avec forte grêle', default: 'Inconnu'
+            },
+            en: {
+                0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+                45: 'Fog', 48: 'Depositing rime fog', 51: 'Light Drizzle', 53: 'Moderate Drizzle',
+                55: 'Dense Drizzle', 61: 'Slight Rain', 63: 'Moderate Rain', 65: 'Heavy Rain',
+                71: 'Slight Snow', 73: 'Moderate Snow', 75: 'Heavy Snow', 77: 'Snow grains',
+                80: 'Slight Rain Showers', 81: 'Moderate Rain Showers', 82: 'Violent Rain Showers',
+                85: 'Slight Snow Showers', 86: 'Heavy Snow Showers', 95: 'Thunderstorm',
+                96: 'Thunderstorm with Hail', 99: 'Thunderstorm with Heavy Hail', default: 'Unknown'
+            },
+            es: {
+                0: 'Cielo despejado', 1: 'Mayormente despejado', 2: 'Parcialmente nublado', 3: 'Nublado',
+                45: 'Niebla', 48: 'Niebla helada', 51: 'Llovizna ligera', 53: 'Llovizna moderada',
+                55: 'Llovizna densa', 61: 'Lluvia ligera', 63: 'Lluvia moderada', 65: 'Lluvia fuerte',
+                71: 'Nieve ligera', 73: 'Nieve moderada', 75: 'Nieve fuerte', 77: 'Granos de nieve',
+                80: 'Chubascos ligeros', 81: 'Chubascos moderados', 82: 'Chubascos violentos',
+                85: 'Chubascos de nieve', 86: 'Chubascos de nieve fuerte', 95: 'Tormenta',
+                96: 'Tormenta con granizo', 99: 'Tormenta con granizo fuerte', default: 'Desconocido'
+            },
+            de: {
+                0: 'Klarer Himmel', 1: 'Überwiegend klar', 2: 'Teilweise bewölkt', 3: 'Bewölkt',
+                45: 'Nebel', 48: 'Reifnebel', 51: 'Leichter Nieselregen', 53: 'Mäßiger Nieselregen',
+                55: 'Dichter Nieselregen', 61: 'Leichter Regen', 63: 'Mäßiger Regen', 65: 'Starker Regen',
+                71: 'Leichter Schnee', 73: 'Mäßiger Schnee', 75: 'Starker Schnee', 77: 'Schneekörner',
+                80: 'Leichte Regenschauer', 81: 'Mäßige Regenschauer', 82: 'Violente Regenschauer',
+                85: 'Leichte Schneeschauer', 86: 'Starke Schneeschauer', 95: 'Gewitter',
+                96: 'Gewitter mit Hagel', 99: 'Gewitter mit starkem Hagel', default: 'Unbekannt'
+            },
+            it: {
+                0: 'Cielo sereno', 1: 'Prevalentemente sereno', 2: 'Parzialmente nuvoloso', 3: 'Nuvoloso',
+                45: 'Nebbia', 48: 'Nebbia gelida', 51: 'Pioggia leggera', 53: 'Pioggia moderata',
+                55: 'Pioggia battente', 61: 'Pioggia lieve', 63: 'Pioggia moderata', 65: 'Pioggia forte',
+                71: 'Neve leggera', 73: 'Neve moderata', 75: 'Neve forte', 77: 'Granelli di neve',
+                80: 'Rovesci leggeri', 81: 'Rovesci moderati', 82: 'Rovesci violenti',
+                85: 'Rovesci di neve', 86: 'Rovesci di neve forte', 95: 'Temporale',
+                96: 'Temporale con grandine', 99: 'Temporale con grandine forte', default: 'Sconosciuto'
+            },
+            pt: {
+                0: 'Céu limpo', 1: 'Predominantemente limpo', 2: 'Parcialmente nublado', 3: 'Nublado',
+                45: 'Nevoeiro', 48: 'Nevoeiro congelante', 51: 'Chuvisco leve', 53: 'Chuvisco moderado',
+                55: 'Chuvisco denso', 61: 'Chuva leve', 63: 'Chuva moderada', 65: 'Chuva forte',
+                71: 'Neve leve', 73: 'Neve moderada', 75: 'Neve forte', 77: 'Grãos de neve',
+                80: 'Pancadas de chuva leves', 81: 'Pancadas de chuva moderadas', 82: 'Pancadas de chuva violentas',
+                85: 'Pancadas de neve', 86: 'Pancadas de neve fortes', 95: 'Tempestade',
+                96: 'Tempestade com granizo', 99: 'Tempestade com granizo forte', default: 'Desconhecido'
+            },
+            ru: {
+                0: 'Ясное небо', 1: 'Преимущественно ясно', 2: 'Переменная облачность', 3: 'Облачно',
+                45: 'Туман', 48: 'Туман изморозь', 51: 'Лёгкая морось', 53: 'Умеренная морось',
+                55: 'Плотная морось', 61: 'Лёгкий дождь', 63: 'Умеренный дождь', 65: 'Сильный дождь',
+                71: 'Лёгкий снег', 73: 'Умеренный снег', 75: 'Сильный снег', 77: 'Снежные зёрна',
+                80: 'Лёгкие ливни', 81: 'Умеренные ливни', 82: 'Сильные ливни',
+                85: 'Лёгкие снежные ливни', 86: 'Сильные снежные ливни', 95: 'Гроза',
+                96: 'Гроза с градом', 99: 'Гроза с сильным градом', default: 'Неизвестно'
+            },
+            zh: {
+                0: '晴', 1: '晴间多云', 2: '多云', 3: '阴',
+                45: '雾', 48: '霜雾', 51: '小毛毛雨', 53: '中毛毛雨',
+                55: '大毛毛雨', 61: '小雨', 63: '中雨', 65: '大雨',
+                71: '小雪', 73: '中雪', 75: '大雪', 77: '雪粒',
+                80: '小阵雨', 81: '中阵雨', 82: '大阵雨',
+                85: '小阵雪', 86: '大阵雪', 95: '雷暴',
+                96: '雷暴加冰雹', 99: '雷暴加大冰雹', default: '未知'
+            },
+            ja: {
+                0: '快晴', 1: 'ほぼ快晴', 2: '晴れ時々曇り', 3: '曇り',
+                45: '霧', 48: '霧氷', 51: '弱い霧雨', 53: '霧雨',
+                55: '強い霧雨', 61: '弱い雨', 63: '雨', 65: '強い雨',
+                71: '弱い雪', 73: '雪', 75: '強い雪', 77: '雪粒',
+                80: '弱い雨の情報', 81: '雨の情報', 82: '強い雨の情報',
+                85: '弱い雪の情報', 86: '強い雪の情報', 95: '雷雨',
+                96: '雷雨と雹', 99: '雷雨と大きな雹', default: '不明'
+            }
+        };
+
+        // Weather code to icon mapping
+        const weatherIcons = {
+            0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+            45: '🌫️', 48: '🌫️', 51: '🌧️', 53: '🌧️',
+            55: '🌧️', 61: '🌧️', 63: '🌧️', 65: '🌧️',
+            71: '🌨️', 73: '🌨️', 75: '❄️', 77: '🌨️',
+            80: '🌦️', 81: '🌦️', 82: '🌦️', 85: '🌨️',
+            86: '🌨️', 95: '⛈️', 96: '⛈️', 99: '⛈️'
+        };
+
+        // Initialize language dropdown
+        function initLanguageDropdown() {
+            const dropdown = document.getElementById('languageDropdown');
+            languages.forEach(lang => {
+                const option = document.createElement('div');
+                option.className = 'language-option' + (lang.code === currentLang ? ' active' : '');
+                option.innerHTML = `<span class="lang-flag">${lang.flag}</span><span>${lang.name}</span>`;
+                option.addEventListener('click', () => changeLanguage(lang.code));
+                dropdown.appendChild(option);
+            });
+
+            document.getElementById('languageBtn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('languageDropdown').classList.toggle('active');
+            });
+
+            document.addEventListener('click', () => {
+                document.getElementById('languageDropdown').classList.remove('active');
+            });
+        }
+
+        // Change language
+        function changeLanguage(langCode) {
+            currentLang = langCode;
+            const t = translations[langCode];
+            
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('cityInput').placeholder = t.searchPlaceholder;
+            document.getElementById('searchBtnText').textContent = t.searchBtn;
+            document.getElementById('popularCitiesTitle').textContent = t.popularCities;
+            document.getElementById('loadingText').textContent = t.loading;
+            document.getElementById('errorTitle').textContent = t.errorTitle;
+            document.getElementById('humidityLabel').textContent = t.humidity;
+            document.getElementById('windLabel').textContent = t.wind;
+            document.getElementById('uvLabel').textContent = t.uvIndex;
+            document.getElementById('sunriseLabel').textContent = t.sunrise;
+            document.getElementById('sunsetLabel').textContent = t.sunset;
+            document.getElementById('footerText').innerHTML = t.footer + ' <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>';
+            document.querySelector('.lang-name').textContent = t.language;
+            
+            const cityTags = document.querySelectorAll('.city-tag');
+            cityTags.forEach(tag => {
+                const cityKey = tag.dataset.city;
+                if (t.cities && t.cities[cityKey]) {
+                    tag.textContent = t.cities[cityKey];
+                }
+            });
+
+            document.querySelectorAll('.language-option').forEach((opt, i) => {
+                opt.classList.toggle('active', languages[i].code === langCode);
+            });
+
+            localStorage.setItem('weatherLang', langCode);
+            
+            if (document.getElementById('cityName').textContent !== 'Ville' && 
+                document.getElementById('cityName').textContent !== 'City') {
+                searchWeather();
+            }
+        }
+
+        // Get weather description in current language
+        function getWeatherDescription(code) {
+            const trans = weatherCodeTranslations[currentLang] || weatherCodeTranslations['en'];
+            return trans[code] || trans['default'] || 'Unknown';
+        }
+
+        // Create weather animation based on weather code
+        function createWeatherAnimation(weatherCode) {
+            const container = document.getElementById('weatherAnimation');
+            container.innerHTML = '';
+            container.className = 'weather-animation';
+            
+            // Sunny/Clear (0, 1)
+            if (weatherCode <= 1) {
+                container.classList.add('sunny-bg');
+                container.innerHTML = '<div class="sun"></div>';
+            }
+            // Cloudy (2, 3)
+            else if (weatherCode <= 3) {
+                container.classList.add('cloudy-bg');
+                container.innerHTML = `
+                    <div class="cloud-anim">☁️</div>
+                    <div class="cloud-anim">☁️</div>
+                    <div class="cloud-anim">☁️</div>
+                `;
+            }
+            // Fog (45, 48)
+            else if (weatherCode === 45 || weatherCode === 48) {
+                container.classList.add('foggy-bg');
+                container.innerHTML = `
+                    <div class="fog"></div>
+                    <div class="fog" style="animation-delay: -5s;"></div>
+                `;
+            }
+            // Rain (51-65, 80-82)
+            else if ((weatherCode >= 51 && weatherCode <= 65) || (weatherCode >= 80 && weatherCode <= 82)) {
+                container.classList.add('rainy-bg');
+                let rainHTML = '<div class="rain-container">';
+                for (let i = 0; i < 50; i++) {
+                    const left = Math.random() * 100;
+                    const delay = Math.random() * 2;
+                    const duration = 0.5 + Math.random() * 0.5;
+                    rainHTML += `<div class="rain-drop" style="left: ${left}%; animation-delay: ${delay}s; animation-duration: ${duration}s;"></div>`;
+                }
+                rainHTML += '</div>';
+                container.innerHTML = rainHTML;
+            }
+            // Snow (71-77, 85, 86)
+            else if ((weatherCode >= 71 && weatherCode <= 77) || (weatherCode >= 85 && weatherCode <= 86)) {
+                container.classList.add('snowy-bg');
+                let snowHTML = '';
+                for (let i = 0; i < 30; i++) {
+                    const left = Math.random() * 100;
+                    const top = Math.random() * 100;
+                    const delay = Math.random() * 5;
+                    const duration = 3 + Math.random() * 4;
+                    const size = 0.8 + Math.random() * 1.2;
+                    snowHTML += `<div class="snowflake" style="left: ${left}%; top: ${top}%; animation-delay: ${delay}s; animation-duration: ${duration}s; font-size: ${size}rem;">❄</div>`;
+                }
+                container.innerHTML = snowHTML;
+            }
+            // Thunderstorm (95-99)
+            else if (weatherCode >= 95 && weatherCode <= 99) {
+                container.classList.add('thunder-bg');
+                container.innerHTML = `
+                    <div class="lightning"></div>
+                    <div class="storm-cloud" style="top: 20%; left: 30%;">🌩️</div>
+                `;
+            }
+        }
+
+        // Update local time
+        function updateLocalTime() {
+            try {
+                const now = new Date();
+                const options = { 
+                    timeZone: currentTimezone,
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: false 
+                };
+                const dateOptions = {
+                    timeZone: currentTimezone,
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                
+                const timeStr = now.toLocaleTimeString(currentLang === 'zh' ? 'en-US' : currentLang + '-' + currentLang.toUpperCase(), options);
+                const dateStr = now.toLocaleDateString(currentLang === 'zh' ? 'en-US' : currentLang + '-' + currentLang.toUpperCase(), dateOptions);
+                
+                document.getElementById('localTime').textContent = timeStr;
+                document.getElementById('localDate').textContent = dateStr;
+            } catch (e) {
+                console.log('Timezone error:', e);
+            }
+        }
+
+        // DOM Elements
+        const cityInput = document.getElementById('cityInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const weatherDisplay = document.getElementById('weatherDisplay');
+        const loading = document.getElementById('loading');
+        const errorMessage = document.getElementById('errorMessage');
+        const cityTags = document.querySelectorAll('.city-tag');
+
+        // Event Listeners
+        searchBtn.addEventListener('click', searchWeather);
+        cityInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchWeather();
+        });
+
+        cityTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                cityInput.value = tag.textContent;
+                searchWeather();
+            });
+        });
+
+        async function searchWeather() {
+            const city = cityInput.value.trim();
+            const t = translations[currentLang];
+            
+            if (!city) {
+                showError(t.enterCity);
+                return;
+            }
+
+            showLoading();
+            hideError();
+            hideWeather();
+
+            try {
+                const geoResponse = await fetch(
+                    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=${currentLang}&format=json`
+                );
+
+                if (!geoResponse.ok) throw new Error('Connection error');
+
+                const geoData = await geoResponse.json();
+
+                if (!geoData.results || geoData.results.length === 0) {
+                    throw new Error('City not found');
+                }
+
+                const location = geoData.results[0];
+                const { latitude, longitude, name, country_code, timezone } = location;
+
+                currentTimezone = timezone || 'UTC';
+
+                const weatherResponse = await fetch(
+                    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,uv_index&daily=sunrise,sunset&timezone=auto`
+                );
+
+                if (!weatherResponse.ok) throw new Error('Connection error');
+
+                const weatherData = await weatherResponse.json();
+
+                displayWeather(name, country_code, weatherData);
+
+            } catch (error) {
+                if (error.message === 'City not found') {
+                    showError(t.errorText);
+                } else {
+                    showError(t.connectionError);
+                }
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function displayWeather(city, countryCode, data) {
+            const current = data.current;
+            const daily = data.daily;
+            const t = translations[currentLang];
+
+            // Update main card
+            document.getElementById('cityName').textContent = city;
+            document.getElementById('countryCode').textContent = countryCode || '';
+            document.getElementById('temperature').textContent = `${Math.round(current.temperature_2m)}°C`;
+            document.getElementById('feelsLike').textContent = `${t.feelsLike} ${Math.round(current.apparent_temperature)}°C`;
+
+            const weatherInfo = weatherIcons[current.weather_code] || '🌡️';
+            document.getElementById('weatherIcon').textContent = weatherInfo;
+            document.getElementById('weatherDescription').textContent = getWeatherDescription(current.weather_code);
+
+            // Create weather animation
+            createWeatherAnimation(current.weather_code);
+
+            // Update info grid
+            document.getElementById('humidity').textContent = `${current.relative_humidity_2m}%`;
+            document.getElementById('windSpeed').textContent = `${Math.round(current.wind_speed_10m)} km/h`;
+            document.getElementById('uvIndex').textContent = current.uv_index ? current.uv_index.toFixed(1) : '0';
+
+            // Format sunrise/sunset times
+            if (daily.sunrise && daily.sunset) {
+                const sunriseDate = new Date(daily.sunrise[0]);
+                const sunsetDate = new Date(daily.sunset[0]);
+                const locale = currentLang === 'zh' || currentLang === 'ja' ? 'en-US' : currentLang + '-' + currentLang.toUpperCase();
+                document.getElementById('sunrise').textContent = sunriseDate.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+                document.getElementById('sunset').textContent = sunsetDate.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+            }
+
+            // Start real-time clock
+            if (timeUpdateInterval) clearInterval(timeUpdateInterval);
+            updateLocalTime();
+            timeUpdateInterval = setInterval(updateLocalTime, 1000);
+
+            showWeather();
+        }
+
+        function showLoading() {
+            loading.classList.add('active');
+            searchBtn.disabled = true;
+        }
+
+        function hideLoading() {
+            loading.classList.remove('active');
+            searchBtn.disabled = false;
+        }
+
+        function showWeather() {
+            weatherDisplay.classList.add('active');
+            errorMessage.classList.remove('active');
+        }
+
+        function hideWeather() {
+            weatherDisplay.classList.remove('active');
+        }
+
+        function showError(message) {
+            errorMessage.querySelector('p').textContent = message;
+            errorMessage.classList.add('active');
+            weatherDisplay.classList.remove('active');
+        }
+
+        function hideError() {
+            errorMessage.classList.remove('active');
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            initLanguageDropdown();
+            
+            const savedLang = localStorage.getItem('weatherLang');
+            if (savedLang && translations[savedLang]) {
+                changeLanguage(savedLang);
+            }
+            
+            cityInput.value = translations[currentLang].cities["Paris"] || 'Paris';
+            searchWeather();
+        });
+    </script>
+</body>
+</html>

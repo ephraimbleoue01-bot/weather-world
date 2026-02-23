@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ephraimbleoue01-bot.github.io/weather-world/sitemap.xml
